@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>إدارة اللاعبين</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>📋 قائمة اللاعبين</h2>
+  <form id="player-form">
+    <input type="text" placeholder="اسم اللاعب" id="player-name" required />
+    <select id="player-position">
+      <option>حارس</option>
+      <option>مدافع</option>
+      <option>وسط</option>
+      <option>مهاجم</option>
+    </select>
+    <button type="submit">➕ إضافة</button>
+  </form>
+  <ul id="player-list"></ul>
+
+  <script src="players.js"></script>
+</body>
+</html>
