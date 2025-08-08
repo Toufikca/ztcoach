@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="platform_title">منصة المدرب المحترف</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Custom styles for Inter font and general body */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        /* Hide sections initially */
+        .section-hidden {
+            display: none;
+        }
+        /* Basic styling for modals */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: auto;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+        .close-button {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #888;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: #333;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px; /* Fixed height for charts */
+            width: 100%;
+        }
+        /* Style for active navigation link */
+        .nav-link.active {
+            background-color: #4CAF50; /* Green */
+            color: white;
+        }
+        /* New styles for language switcher */
+        .language-switcher {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            gap: 5px;
+        }
+        .language-switcher button {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .language-switcher button:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+        .language-switcher button.active {
+            background-color: white;
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <header class="bg-gradient-to-r from-green-600 to-green-800 text-white p-4 shadow-lg relative">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-3xl font-bold" data-i18n="platform_title">منصة المدرب المحترف <span class="text-xl font-normal">2025</span></h1>
+            <nav>
+                <ul class="flex space-x-4 space-x-reverse" id="main-nav-links">
+                    <li><a href="#" id="home-nav" class="nav-link p-2 rounded-md hover:bg-green-700 transition-colors" data-i18n="nav_home">الرئيسية</a></li>
+                    <li><a href="#" id="dashboard-nav" class="nav-link p-2 rounded-md hover:bg-green-700 transition-colors section-hidden" data-i18n="nav_dashboard">لوحة التحكم</a></li>
+                    <li><a href="#" id="logout-nav" class="nav-link p-2 rounded-md hover:bg-green-700 transition-colors section-hidden" data-i18n="nav_logout">تسجيل الخروج</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="language-switcher">
+            <button id="lang-ar" class="active">AR</button>
+            <button id="lang-en">EN</button>
+            <button id="lang-fr">FR</button>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto p-6">
+
+        <section id="home-section" class="bg-white p-8 rounded-xl shadow-lg text-center">
+            <h2 class="text-5xl font-extrabold text-green-700 mb-6" data-i18n="home_title">أطلق العنان لإمكانيات فريقك</h2>
+            <p class="text-xl text-gray-700 mb-8 max-w-3xl mx-auto" data-i18n="home_subtitle">منصة شاملة لمساعدتك كمدرب على إدارة برامجك التدريبية، تقييم اللاعبين، وضبط الجدول والأسلوب التدريبي بمرونة واحترافية.</p>
+            <div class="grid md:grid-cols-2 gap-8 mb-10">
+                <div class="relative overflow-hidden rounded-lg shadow-md">
+                    <img src="https://placehold.co/600x400/4CAF50/FFFFFF?text=Team+Training" alt="فريق يتدرب" class="w-full h-64 object-cover transform hover:scale-105 transition-transform duration-300">
+                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center text-white text-2xl font-semibold opacity-0 hover:opacity-100 transition-opacity duration-300" data-i18n="home_training_card">إدارة التدريبات</div>
+                </div>
+                <div class="relative overflow-hidden rounded-lg shadow-md">
+                    <img src="https://placehold.co/600x400/4CAF50/FFFFFF?text=Player+Analytics" alt="تحليل أداء اللاعبين" class="w-full h-64 object-cover transform hover:scale-105 transition-transform duration-300">
+                    <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center text-white text-2xl font-semibold opacity-0 hover:opacity-100 transition-opacity duration-300" data-i18n="home_analytics_card">تحليل اللاعبين</div>
+                </div>
+            </div>
+            <button id="show-login-signup-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full text-lg shadow-lg transform hover:scale-105 transition-transform duration-300" data-i18n="home_cta">ابدأ الآن! سجل أو سجل الدخول</button>
+        </section>
+
+        <div id="login-signup-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h3 class="text-2xl font-bold text-center mb-6 text-green-700" data-i18n="auth_title">تسجيل الدخول / إنشاء حساب</h3>
+                <form id="auth-form" class="space-y-4">
+                    <div>
+                        <label for="auth-email" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="auth_email">البريد الإلكتروني:</label>
+                        <input type="email" id="auth-email" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500" data-i18n-placeholder="auth_email_placeholder" placeholder="ادخل بريدك الإلكتروني" required>
+                    </div>
+                    <div>
+                        <label for="auth-password" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="auth_password">كلمة المرور:</label>
+                        <input type="password" id="auth-password" class="shadow appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500" data-i18n-placeholder="auth_password_placeholder" placeholder="ادخل كلمة المرور" required>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <button type="submit" id="login-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-full focus:outline-none focus:shadow-outline transition-colors" data-i18n="auth_login_btn">تسجيل الدخول</button>
+                        <button type="button" id="signup-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full focus:outline-none focus:shadow-outline transition-colors" data-i18n="auth_signup_btn">إنشاء حساب جديد</button>
+                    </div>
+                    <p id="auth-message" class="text-center text-sm mt-4"></p>
+                </form>
+            </div>
+        </div>
+
+        <section id="dashboard-section" class="section-hidden bg-white p-8 rounded-xl shadow-lg">
+            <h2 class="text-4xl font-extrabold text-green-700 mb-8 text-center" data-i18n="dashboard_title">لوحة تحكم المدرب</h2>
+
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <aside class="lg:col-span-1 bg-gray-50 p-6 rounded-lg shadow-md">
+                    <nav class="space-y-4">
+                        <a href="#" class="dashboard-nav-link block p-3 rounded-md text-gray-700 hover:bg-green-100 transition-colors" data-target="coach-profile"><i class="fas fa-user-circle ml-2"></i><span data-i18n="sidebar_profile">ملف المدرب</span></a>
+                        <a href="#" class="dashboard-nav-link block p-3 rounded-md text-gray-700 hover:bg-green-100 transition-colors" data-target="player-management"><i class="fas fa-users ml-2"></i><span data-i18n="sidebar_players">إدارة اللاعبين</span></a>
+                        <a href="#" class="dashboard-nav-link block p-3 rounded-md text-gray-700 hover:bg-green-100 transition-colors" data-target="training-schedule"><i class="fas fa-calendar-alt ml-2"></i><span data-i18n="sidebar_schedule">الجدول التدريبي</span></a>
+                        <a href="#" class="dashboard-nav-link block p-3 rounded-md text-gray-700 hover:bg-green-100 transition-colors" data-target="team-analysis"><i class="fas fa-chart-bar ml-2"></i><span data-i18n="sidebar_analysis">تحليل الفريق</span></a>
+                        <a href="#" class="dashboard-nav-link block p-3 rounded-md text-gray-700 hover:bg-green-100 transition-colors" data-target="player-attendance"><i class="fas fa-check-circle ml-2"></i><span data-i18n="sidebar_attendance">تسجيل الحضور</span></a>
+                        <a href="#" class="dashboard-nav-link block p-3 rounded-md text-gray-700 hover:bg-green-100 transition-colors" data-target="program-builder"><i class="fas fa-clipboard-list ml-2"></i><span data-i18n="sidebar_programs">بناء البرامج</span></a>
+                    </nav>
+                </aside>
+
+                <div class="lg:col-span-3 space-y-8">
+
+                    <div id="coach-profile" class="dashboard-content bg-gray-50 p-6 rounded-lg shadow-md">
+                        <h3 class="text-3xl font-bold text-green-700 mb-6" data-i18n="profile_title">ملف المدرب</h3>
+                        <form id="coach-profile-form" class="space-y-4">
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="coach-name" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="profile_name">الاسم:</label>
+                                    <input type="text" id="coach-name" class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500">
+                                </div>
+                                <div>
+                                    <label for="coach-age" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="profile_age">العمر:</label>
+                                    <input type="number" id="coach-age" class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500">
+                                </div>
+                                <div>
+                                    <label for="coach-nationality" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="profile_nationality">الجنسية:</label>
+                                    <select id="coach-nationality" class="shadow border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500"></select>
+                                </div>
+                                <div>
+                                    <label for="coach-phone" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="profile_phone">رقم الهاتف:</label>
+                                    <input type="tel" id="coach-phone" class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500">
+                                </div>
+                                <div>
+                                    <label for="coach-continent" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="profile_continent">قارة الحصول على الشهادة:</label>
+                                    <select id="coach-continent" class="shadow border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500"></select>
+                                </div>
+                                <div>
+                                    <label for="coach-certificate" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="profile_certificate">الشهادة التدريبية:</label>
+                                    <select id="coach-certificate" class="shadow border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500">
+                                        <option value="" data-i18n="select_option">اختر</option>
+                                        <option value="D">D</option>
+                                        <option value="C">C</option>
+                                        <option value="B">B</option>
+                                        <option value="A">A</option>
+                                        <option value="PRO">PRO</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="coach-style" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="profile_style">الأسلوب المفضل:</label>
+                                    <select id="coach-style" class="shadow border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500">
+                                        <option value="" data-i18n="select_option">اختر</option>
+                                        <option value="offensive" data-i18n="style_offensive">هجومي</option>
+                                        <option value="defensive" data-i18n="style_defensive">دفاعي</option>
+                                        <option value="possession" data-i18n="style_possession">استحواذ</option>
+                                        <option value="player-dependent" data-i18n="style_player_dependent">حسب اللاعبين</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="coach-age-group" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="profile_age_group">الفئة العمرية:</label>
+                                    <select id="coach-age-group" class="shadow border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-500">
+                                        <option value="" data-i18n="select_option">اختر</option>
+                                        <option value="U15">U15</option>
+                                        <option value="U17">U17</option>
+                                        <option value="U19">U19</option>
+                                        <option value="womens-team" data-i18n="age_group_women">فريق نسائي</option>
+                                        <option value="senior" data-i18n="age_group_senior">أكابر</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-full focus:outline-none focus:shadow-outline transition-colors" data-i18n="profile_save_btn">حفظ البيانات</button>
+                            <p id="profile-message" class="text-sm mt-2"></p>
+                        </form>
+                    </div>
+
+                    <div id="player-management" class="dashboard-content section-hidden bg-gray-50 p-6 rounded-lg shadow-md">
+                        <h3 class="text-3xl font-bold text-green-700 mb-6" data-i18n="players_title">إدارة اللاعبين</h3>
+                        <button id="add-player-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full mb-4 transition-colors" data-i18n="players_add_btn">إضافة لاعب جديد</button>
+                        <div id="player-form-container" class="section-hidden bg-white p-6 rounded-lg shadow-inner mb-6">
+                            <h4 id="player-form-title" class="text-2xl font-bold text-gray-700 mb-4" data-i18n="players_add_form_title">إضافة لاعب جديد</h4>
+                            <form id="player-form" class="space-y-4">
+                                <input type="hidden" id="player-id">
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="player-name" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="player_name_label">اسم اللاعب:</label>
+                                        <input type="text" id="player-name" class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight" required>
+                                    </div>
+                                    <div>
+                                        <label for="player-age" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="player_age_label">العمر:</label>
+                                        <input type="number" id="player-age" class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight" required>
+                                    </div>
+                                    <div>
+                                        <label for="player-position" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="player_position_label">المركز:</label>
+                                        <input type="text" id="player-position" class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight" required>
+                                    </div>
+                                    <div>
+                                        <label for="player-jersey" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="player_jersey_label">رقم القميص:</label>
+                                        <input type="number" id="player-jersey" class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight" required>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                    <div>
+                                        <h5 class="text-lg font-bold mb-2" data-i18n="player_skills_technical">المهارات الفنية</h5>
+                                        <div class="space-y-2">
+                                            <label class="block text-sm">التمرير:<input type="number" class="player-skill-input w-full" data-skill="passing" min="0" max="20" value="10"></label>
+                                            <label class="block text-sm">الاستلام:<input type="number" class="player-skill-input w-full" data-skill="receiving" min="0" max="20" value="10"></label>
+                                            <label class="block text-sm">المراوغة:<input type="number" class="player-skill-input w-full" data-skill="dribbling" min="0" max="20" value="10"></label>
+                                            <label class="block text-sm">التسديد:<input type="number" class="player-skill-input w-full" data-skill="shooting" min="0" max="20" value="10"></label>
+                                            <label class="block text-sm">التحكم بالكرة:<input type="number" class="player-skill-input w-full" data-skill="ballControl" min="0" max="20" value="10"></label>
+                                            <label class="block text-sm">التدخل:<input type="number" class="player-skill-input w-full" data-skill="tackling" min="0" max="20" value="10"></label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h5 class="text-lg font-bold mb-2" data-i18n="player_skills_physical">القدرات البدنية</h5>
+                                        <div class="space-y-2">
+                                            <label class="block text-sm">السرعة:<input type="number" class="player-skill-input w-full" data-skill="speed" min="0" max="20" value="10"></label>
+                                            <label class="block text-sm">القوة:<input type="number" class="player-skill-input w-full" data-skill="strength" min="0" max="20" value="10"></label>
+                                            <label class="block text-sm">التحمل:<input type="number" class="player-skill-input w-full" data-skill="stamina" min="0" max="20" value="10"></label>
+                                            <label class="block text-sm">المرونة:<input type="number" class="player-skill-input w-full" data-skill="flexibility" min="0" max="20" value="10"></label>
+                                            <label class="block text-sm">التوازن:<input type="number" class="player-skill-input w-full" data-skill="balance" min="0" max="20" value="10"></label>
+                                            <label class="block text-sm">الرشاقة:<input type="number" class="player-skill-input w-full" data-skill="agility" min="0" max="20" value="10"></label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h5 class="text-lg font-bold mb-2" data-i18n="player_skills_tactical">الذكاء التكتيكي</h5>
+                                        <div class="space-y-2">
+                                            <label class="block text-sm">التمركز:<input type="number" class="player-skill-input w-full" data-skill="positioning" min="0" max="20" value="10"></label>
+                                            <label class="block text-sm">اتباع التعليمات:<input type="number" class="player-skill-input w-full" data-skill="followingInstructions" min="0" max="20" value="10"></label>
+                                            <label class="block text-sm">قراءة اللعب:<input type="number" class="player-skill-input w-full" data-skill="gameReading" min="0" max="20" value="10"></label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h5 class="text-lg font-bold mb-2" data-i18n="player_skills_mental">الجوانب الذهنية</h5>
+                                        <div class="space-y-2">
+                                            <label class="block text-sm">العدوانية:<input type="number" class="player-skill-input w-full" data-skill="aggression" min="0" max="20" value="10"></label>
+                                            <label class="block text-sm">التركيز:<input type="number" class="player-skill-input w-full" data-skill="focus" min="0" max="20" value="10"></label>
+                                            <label class="block text-sm">الثقة بالنفس:<input type="number" class="player-skill-input w-full" data-skill="confidence" min="0" max="20" value="10"></label>
+                                            <label class="block text-sm">القيادة:<input type="number" class="player-skill-input w-full" data-skill="leadership" min="0" max="20" value="10"></label>
+                                            <label class="block text-sm">الدافعية:<input type="number" class="player-skill-input w-full" data-skill="motivation" min="0" max="20" value="10"></label>
+                                            <label class="block text-sm">تحمل الضغط:<input type="number" class="player-skill-input w-full" data-skill="pressureHandling" min="0" max="20" value="10"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex space-x-4 space-x-reverse">
+                                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-full" data-i18n="players_save_btn">حفظ</button>
+                                    <button type="button" id="cancel-player-edit-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full" data-i18n="players_cancel_btn">إلغاء</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="players-list" class="space-y-4">
+                            </div>
+                    </div>
+
+                    <div id="player-details-modal" class="modal">
+                        <div class="modal-content max-w-2xl">
+                            <span class="close-button">&times;</span>
+                            <h3 id="player-details-name" class="text-3xl font-bold text-center text-green-700 mb-2"></h3>
+                            <p class="text-center text-gray-600 mb-6"><span id="player-details-position"></span> | <span data-i18n="player_age_label">العمر</span>: <span id="player-details-age"></span> | <span data-i18n="player_jersey_label">رقم القميص</span>: <span id="player-details-jersey"></span></p>
+
+                            <div class="chart-container mb-6">
+                                <h4 class="text-xl font-bold mb-2 text-center" data-i18n="player_skills_graph_title">ملخص قدرات اللاعب</h4>
+                                <canvas id="player-skills-radar-chart"></canvas>
+                            </div>
+
+                            <div id="player-details-stats" class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+                                <div><h5 class="text-lg font-bold mb-2 text-green-700" data-i18n="player_skills_technical">المهارات الفنية</h5><ul class="list-disc list-inside space-y-1" id="details-technical-skills"></ul></div>
+                                <div><h5 class="text-lg font-bold mb-2 text-green-700" data-i18n="player_skills_physical">القدرات البدنية</h5><ul class="list-disc list-inside space-y-1" id="details-physical-abilities"></ul></div>
+                                <div><h5 class="text-lg font-bold mb-2 text-green-700" data-i18n="player_skills_tactical">الذكاء التكتيكي</h5><ul class="list-disc list-inside space-y-1" id="details-tactical-intelligence"></ul></div>
+                                <div><h5 class="text-lg font-bold mb-2 text-green-700" data-i18n="player_skills_mental">الجوانب الذهنية</h5><ul class="list-disc list-inside space-y-1" id="details-mental-psychological"></ul></div>
+                            </div>
+                            <div class="flex justify-center mt-6 space-x-4 space-x-reverse">
+                                <button id="edit-player-details-btn" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-6 rounded-full" data-i18n="players_edit_btn">تعديل</button>
+                                <button id="delete-player-details-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full" data-i18n="players_delete_btn">حذف</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="player-attendance" class="dashboard-content section-hidden bg-gray-50 p-6 rounded-lg shadow-md">
+                        <h3 class="text-3xl font-bold text-green-700 mb-6" data-i18n="attendance_title">تسجيل حضور اللاعبين</h3>
+                        <p class="text-gray-600 mb-4" data-i18n="attendance_date">توقيت الحصة التدريبية: <span id="current-training-date" class="font-bold"></span></p>
+                        <div class="overflow-x-auto bg-white rounded-lg shadow-inner">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="attendance_player_header">اسم اللاعب</th>
+                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="attendance_status_header">حالة الحضور</th>
+                                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="attendance_notes_header">ملاحظات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="attendance-table-body" class="bg-white divide-y divide-gray-200">
+                                    </tbody>
+                            </table>
+                        </div>
+                        <button id="save-attendance-btn" class="mt-6 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-full" data-i18n="attendance_save_btn">حفظ الحضور</button>
+                        <p id="attendance-message" class="text-sm mt-2"></p>
+                    </div>
+
+                    <div id="training-schedule" class="dashboard-content section-hidden bg-gray-50 p-6 rounded-lg shadow-md">
+                        <h3 class="text-3xl font-bold text-green-700 mb-6" data-i18n="schedule_title">الجدول التدريبي</h3>
+                        <div class="flex justify-between items-center mb-4">
+                            <button id="prev-week-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-full transition-colors"><i class="fas fa-chevron-right"></i></button>
+                            <h4 id="current-week-display" class="text-xl font-bold"></h4>
+                            <button id="next-week-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-full transition-colors"><i class="fas fa-chevron-left"></i></button>
+                        </div>
+                        <div id="weekly-calendar" class="grid grid-cols-7 gap-2 text-center bg-white p-4 rounded-lg shadow-inner">
+                            <div class="text-lg font-bold p-2 border-b-2 border-green-500 text-green-700" data-i18n="day_saturday">السبت</div>
+                            <div class="text-lg font-bold p-2 border-b-2 border-green-500 text-green-700" data-i18n="day_sunday">الأحد</div>
+                            <div class="text-lg font-bold p-2 border-b-2 border-green-500 text-green-700" data-i18n="day_monday">الاثنين</div>
+                            <div class="text-lg font-bold p-2 border-b-2 border-green-500 text-green-700" data-i18n="day_tuesday">الثلاثاء</div>
+                            <div class="text-lg font-bold p-2 border-b-2 border-green-500 text-green-700" data-i18n="day_wednesday">الأربعاء</div>
+                            <div class="text-lg font-bold p-2 border-b-2 border-green-500 text-green-700" data-i18n="day_thursday">الخميس</div>
+                            <div class="text-lg font-bold p-2 border-b-2 border-green-500 text-green-700" data-i18n="day_friday">الجمعة</div>
+                            </div>
+                        <div class="flex justify-end mt-4">
+                            <button id="add-event-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full" data-i18n="schedule_add_event_btn">إضافة حدث جديد</button>
+                        </div>
+                    </div>
+
+                    <div id="event-modal" class="modal">
+                        <div class="modal-content">
+                            <span class="close-button">&times;</span>
+                            <h3 id="event-modal-title" class="text-2xl font-bold text-center mb-6 text-green-700" data-i18n="event_modal_title">إضافة حدث جديد</h3>
+                            <form id="event-form" class="space-y-4">
+                                <input type="hidden" id="event-id">
+                                <div>
+                                    <label for="event-title" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="event_title_label">عنوان الحدث:</label>
+                                    <input type="text" id="event-title" class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight" required>
+                                </div>
+                                <div>
+                                    <label for="event-date" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="event_date_label">التاريخ:</label>
+                                    <input type="date" id="event-date" class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight" required>
+                                </div>
+                                <div>
+                                    <label for="event-time" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="event_time_label">الوقت:</label>
+                                    <input type="time" id="event-time" class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight">
+                                </div>
+                                <div>
+                                    <label for="event-type" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="event_type_label">نوع الحدث:</label>
+                                    <select id="event-type" class="shadow border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight">
+                                        <option value="training" data-i18n="event_type_training">حصة تدريبية</option>
+                                        <option value="match" data-i18n="event_type_match">مباراة</option>
+                                        <option value="meeting" data-i18n="event_type_meeting">اجتماع</option>
+                                    </select>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-full" data-i18n="event_save_btn">حفظ</button>
+                                    <button type="button" id="delete-event-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full section-hidden" data-i18n="event_delete_btn">حذف</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div id="team-analysis" class="dashboard-content section-hidden bg-gray-50 p-6 rounded-lg shadow-md">
+                        <h3 class="text-3xl font-bold text-green-700 mb-6" data-i18n="analysis_title">تحليل الفريق</h3>
+                        <div class="grid md:grid-cols-2 gap-6 mb-6">
+                            <div class="bg-white p-4 rounded-lg shadow-inner">
+                                <h4 class="text-xl font-bold text-green-700 mb-4" data-i18n="analysis_average_skills">متوسط مهارات الفريق</h4>
+                                <div class="chart-container">
+                                    <canvas id="team-skills-radar-chart"></canvas>
+                                </div>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-inner">
+                                <h4 class="text-xl font-bold text-green-700 mb-4" data-i18n="analysis_skill_distribution">توزيع نقاط القوة والضعف</h4>
+                                <div class="chart-container">
+                                    <canvas id="player-category-pie-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-inner">
+                            <h4 class="text-xl font-bold text-green-700 mb-4" data-i18n="analysis_coach_notes">ملاحظات المدرب والتوصيات</h4>
+                            <div class="flex flex-col md:flex-row gap-4 mb-4">
+                                <p class="bg-green-100 text-green-800 p-2 rounded-lg flex-1" data-i18n="analysis_strengths">نقاط القوة: <span id="team-strengths" class="font-bold"></span></p>
+                                <p class="bg-red-100 text-red-800 p-2 rounded-lg flex-1" data-i18n="analysis_weaknesses">نقاط الضعف: <span id="team-weaknesses" class="font-bold"></span></p>
+                            </div>
+                            <div class="mb-4">
+                                <h5 class="text-lg font-bold mb-2" data-i18n="analysis_tactical_plan">تطوير الخطة التكتيكية بناء على نقاط ضعف المنافس</h5>
+                                <textarea id="opponent-info" class="w-full h-24 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" data-i18n-placeholder="analysis_opponent_placeholder" placeholder="ادخل معلومات عن الفريق المنافس..."></textarea>
+                                <button id="suggest-plan-btn" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-full mt-2" data-i18n="analysis_suggest_btn">اقتراح خطة</button>
+                            </div>
+                            <div id="suggested-plan-output" class="bg-gray-100 p-4 rounded-lg">
+                                <h5 class="text-lg font-bold mb-2" data-i18n="analysis_suggested_plan_title">الخطة المقترحة:</h5>
+                                <p id="plan-details" class="text-gray-700"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="program-builder" class="dashboard-content section-hidden bg-gray-50 p-6 rounded-lg shadow-md">
+                        <h3 class="text-3xl font-bold text-green-700 mb-6" data-i18n="programs_title">بناء البرامج التدريبية</h3>
+                        <div class="bg-white p-6 rounded-lg shadow-inner mb-6">
+                            <h4 class="text-2xl font-bold text-gray-700 mb-4" data-i18n="programs_new_program_title">إنشاء برنامج تدريبي جديد</h4>
+                            <form id="new-program-form" class="space-y-4">
+                                <div>
+                                    <label for="program-name" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="programs_name_label">اسم البرنامج:</label>
+                                    <input type="text" id="program-name" class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight" required>
+                                </div>
+                                <div>
+                                    <label for="program-type" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="programs_type_label">نوع البرنامج:</label>
+                                    <select id="program-type" class="shadow border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight" required>
+                                        <option value="" data-i18n="select_option">اختر</option>
+                                        <option value="offensive" data-i18n="style_offensive">هجومي</option>
+                                        <option value="defensive" data-i18n="style_defensive">دفاعي</option>
+                                        <option value="physical" data-i18n="programs_type_physical">بدني</option>
+                                        <option value="tactical" data-i18n="programs_type_tactical">تكتيكي</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full" data-i18n="programs_create_btn">إنشاء</button>
+                            </form>
+                        </div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="text-2xl font-bold text-gray-700" data-i18n="programs_exercises_title">تمارين البرنامج</h4>
+                            <button id="add-exercise-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-full" data-i18n="programs_add_exercise_btn">إضافة تمرين</button>
+                        </div>
+                        <div id="exercise-form-container" class="section-hidden bg-white p-6 rounded-lg shadow-inner mb-6">
+                            <h5 class="text-xl font-bold text-gray-700 mb-4" data-i18n="programs_add_exercise_form_title">إضافة تمرين جديد</h5>
+                            <form id="exercise-form" class="space-y-4">
+                                <input type="hidden" id="exercise-id">
+                                <div>
+                                    <label for="exercise-name" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="exercise_name_label">اسم التمرين:</label>
+                                    <input type="text" id="exercise-name" class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight" required>
+                                </div>
+                                <div>
+                                    <label for="exercise-objective" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="exercise_objective_label">الهدف من التمرين:</label>
+                                    <textarea id="exercise-objective" class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight h-24" required></textarea>
+                                </div>
+                                <div>
+                                    <label for="exercise-tools" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="exercise_tools_label">الأدوات:</label>
+                                    <input type="text" id="exercise-tools" class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight" placeholder="أقماع، كرات، إلخ...">
+                                </div>
+                                <div>
+                                    <label for="exercise-players" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="exercise_players_label">عدد اللاعبين:</label>
+                                    <input type="number" id="exercise-players" class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight">
+                                </div>
+                                <div>
+                                    <label for="exercise-skills" class="block text-gray-700 text-sm font-bold mb-2" data-i18n="exercise_skills_label">المهارات المستهدفة (فاصلة):</label>
+                                    <input type="text" id="exercise-skills" class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight" placeholder="التمرير، التسديد، إلخ...">
+                                </div>
+                                <div class="flex space-x-4 space-x-reverse">
+                                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full" data-i18n="programs_save_exercise_btn">حفظ</button>
+                                    <button type="button" id="cancel-exercise-edit-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full" data-i18n="players_cancel_btn">إلغاء</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="exercises-list" class="space-y-4">
+                            </div>
+                        <div class="flex justify-center mt-6 space-x-4 space-x-reverse">
+                            <button id="export-pdf-btn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full" data-i18n="programs_export_pdf_btn">تصدير PDF</button>
+                            <button id="export-excel-btn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded-full" data-i18n="programs_export_excel_btn">تصدير Excel</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 text-white p-4 text-center mt-auto">
+        <p data-i18n="footer_copyright">&copy; 2025 منصة المدرب المحترف. كل الحقوق محفوظة.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+/* Custom CSS for additional styling and font */
+
+/* Set default font to Inter and ensure text direction is RTL */
+body {
+    font-family: 'Inter', sans-serif;
+    direction: rtl; /* Set text direction to Right-to-Left for Arabic */
+    text-align: right; /* Align text to the right for Arabic */
+}
+
+/* Specific adjustments for input and textarea alignment */
+textarea, input {
+    text-align: right; /* Ensure input text is right-aligned */
+}
+
+/* Adjust label text alignment */
+label {
+    text-align: right; /* Ensure labels are right-aligned */
+}
+
+/* Ensure placeholder text is right-aligned */
+::placeholder {
+    text-align: right;
+}
